@@ -167,6 +167,9 @@ public class Alarm {
         this.repeatSettings = repeatSettings;
 
         //no repeating enabled if there are no days to repeat!
+        if ((this.repeatSettings & AlarmConstants.ALLDAYS) == 0) { this.repeatSettings = 0; }
+
+        //no repeating enabled if there are no days to repeat!
         if ((repeatSettings & AlarmConstants.ALLDAYS) == 0) { repeatSettings = 0; }
 
         setTime(hour, minute);

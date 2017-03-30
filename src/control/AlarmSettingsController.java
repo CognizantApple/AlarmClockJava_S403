@@ -42,6 +42,9 @@ public class AlarmSettingsController implements Initializable{
 	private HBox weekdayButtons;
 	@FXML
 	private ToggleButton sunButton, monButton, tueButton, wedButton, thuButton, friButton, satButton;
+	
+	private ToggleButton[] buttonsList;
+	
 	@FXML
 	private ChoiceBox<String> ringtoneChoiceBox;
 	@FXML
@@ -69,10 +72,15 @@ public class AlarmSettingsController implements Initializable{
 		this.alarmID = alarmID;
 	}
 	
+	private void setButtonsList(){
+		ToggleButton list[] = {sunButton, monButton, tueButton, wedButton, thuButton, friButton, satButton};
+		buttonsList = list;
+	}
+	
 	@Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void initialize(URL arg0, ResourceBundle arg1) {
-
+		setButtonsList();
         AlarmManager alarmManager = AlarmManager.getInstance();
         int defaultHour = alarmManager.getAlarm(alarmID).getHour();
         int defaultMinute = alarmManager.getAlarm(alarmID).getMinute();
@@ -167,13 +175,10 @@ public class AlarmSettingsController implements Initializable{
      * applies the current alarm repeat settings to the day toggle display
      */
     private void setAlarmRepeatSettings(){
-        sunButton.setSelected((repeatSettings & AlarmConstants.SUNDAY) != 0);
-        monButton.setSelected((repeatSettings & AlarmConstants.MONDAY) != 0);
-        tueButton.setSelected((repeatSettings & AlarmConstants.TUESDAY) != 0);
-        wedButton.setSelected((repeatSettings & AlarmConstants.WEDNESDAY) != 0);
-        thuButton.setSelected((repeatSettings & AlarmConstants.THURSDAY) != 0);
-        friButton.setSelected((repeatSettings & AlarmConstants.FRIDAY) != 0);
-        satButton.setSelected((repeatSettings & AlarmConstants.SATURDAY) != 0);
+    	for(int i = 0; i < 7; i++){
+    		buttonsList[i].setSelected((repeatSettings & AlarmConstants.WEEK_ARRAY[i]) != 0);
+    		buttonsList[i].setStyle(buttonsList[i].isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
+    	}
         if ((repeatSettings & AlarmConstants.REPEAT_ENABLED) != 0){
         	weekdayButtons.setVisible(true);
             repeatButton.setSelected(true);
@@ -190,13 +195,10 @@ public class AlarmSettingsController implements Initializable{
     private void setRepeatSettingsFromToggles(){
         repeatSettings = 0x0000;
         if (repeatButton.isSelected()) { repeatSettings |= AlarmConstants.REPEAT_ENABLED; }
-        if (sunButton.isSelected()) { repeatSettings |= AlarmConstants.SUNDAY; }
-        if (monButton.isSelected()) { repeatSettings |= AlarmConstants.MONDAY; }
-        if (tueButton.isSelected()) { repeatSettings |= AlarmConstants.TUESDAY; }
-        if (wedButton.isSelected()) { repeatSettings |= AlarmConstants.WEDNESDAY; }
-        if (thuButton.isSelected()) { repeatSettings |= AlarmConstants.THURSDAY; }
-        if (friButton.isSelected()) { repeatSettings |= AlarmConstants.FRIDAY; }
-        if (satButton.isSelected()) { repeatSettings |= AlarmConstants.SATURDAY; }
+
+    	for(int i = 0; i < 7; i++){
+    		if (buttonsList[i].isSelected()) { repeatSettings |= AlarmConstants.WEEK_ARRAY[i]; };
+    	}
     }
     
     private void setAlarmTitle(){
@@ -257,43 +259,43 @@ public class AlarmSettingsController implements Initializable{
    * handles clicking of the sunday repeat toggleButton.
    */
  public void sunClicked(ActionEvent event) {
-	 //TODO something pretty
+	 sunButton.setStyle(sunButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
  }
  /**
-  * handles clicking of the sunday repeat toggleButton.
+  * handles clicking of the monday repeat toggleButton.
   */
 public void monClicked(ActionEvent event) {
-	 //TODO something pretty
+	 monButton.setStyle(monButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
 }
 /**
- * handles clicking of the sunday repeat toggleButton.
+ * handles clicking of the tuesday repeat toggleButton.
  */
 public void tueClicked(ActionEvent event) {
-	 //TODO something pretty
+	 tueButton.setStyle(tueButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
 }
 /**
- * handles clicking of the sunday repeat toggleButton.
+ * handles clicking of the wednesday repeat toggleButton.
  */
 public void wedClicked(ActionEvent event) {
-	 //TODO something pretty
+	 wedButton.setStyle(wedButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
 }
 /**
- * handles clicking of the sunday repeat toggleButton.
+ * handles clicking of the thursday repeat toggleButton.
  */
 public void thuClicked(ActionEvent event) {
-	 //TODO something pretty
+	 thuButton.setStyle(thuButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
 }
 /**
- * handles clicking of the sunday repeat toggleButton.
+ * handles clicking of the friday repeat toggleButton.
  */
 public void friClicked(ActionEvent event) {
-	 //TODO something pretty
+	 friButton.setStyle(friButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
 }
 /**
- * handles clicking of the sunday repeat toggleButton.
+ * handles clicking of the saturday repeat toggleButton.
  */
 public void satClicked(ActionEvent event) {
-	 //TODO something pretty
+	 satButton.setStyle(satButton.isSelected() ? "-fx-base: lightgreen;" : "-fx-base: lightgray;" );
 }
    
    
