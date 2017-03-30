@@ -4,23 +4,31 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="199.0" prefWidth="232.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-   <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="619.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="337.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <VBox alignment="TOP_CENTER" layoutY="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="337.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
       <children>
-          <Label text="Change Alarm Settings">
+          <Label prefHeight="44.0" prefWidth="194.0" text="Change Alarm Settings">
               <font>
                   <Font name="System Bold" size="18.0" />
               </font>
           </Label>
          <HBox alignment="CENTER" prefHeight="95.0" prefWidth="218.0">
             <children>
+               <Label prefHeight="44.0" prefWidth="84.0" text="Alarm Time:">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font>
+               </Label>
                 <Spinner fx:id="hourSpinner" prefHeight="30.0" prefWidth="65.0" />
                 <Label text=":">
                     <font>
@@ -32,7 +40,77 @@
                <ChoiceBox fx:id="amfmChoiceBox" prefHeight="25.0" prefWidth="52.0" />
             </children>
          </HBox>
-         <HBox alignment="BOTTOM_CENTER" prefHeight="35.0" prefWidth="277.0" spacing="50.0">
+         <VBox prefHeight="71.0" prefWidth="337.0">
+            <children>
+               <HBox alignment="CENTER" prefHeight="24.0" prefWidth="337.0">
+                  <children>
+                     <Label prefHeight="44.0" prefWidth="67.0" text="Repeat:">
+                        <font>
+                           <Font name="System Bold" size="14.0" />
+                        </font>
+                     </Label>
+                     <RadioButton fx:id="repeatButton" mnemonicParsing="false" onAction="#repeatClicked" />
+                     <Region prefHeight="100.0" prefWidth="6.0" />
+                  </children>
+               </HBox>
+               <HBox fx:id="weekdayButtons" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                     <ToggleButton fx:id="sunButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#sunClicked" prefWidth="42.0" text="Sun">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                     <ToggleButton fx:id="monButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#monClicked" prefWidth="42.0" text="Mon">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                     <ToggleButton fx:id="tueButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#tueClicked" prefWidth="42.0" text="Tue">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                     <ToggleButton fx:id="wedButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#wedClicked" prefWidth="42.0" text="Wed">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                     <ToggleButton fx:id="thuButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#thuClicked" prefWidth="42.0" text="Thu">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                     <ToggleButton fx:id="friButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#friClicked" prefWidth="42.0" text="Fri">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                     <ToggleButton fx:id="satButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#satClicked" prefWidth="42.0" text="Sat">
+                        <HBox.margin>
+                           <Insets left="2.0" right="2.0" />
+                        </HBox.margin>
+                     </ToggleButton>
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
+         <HBox alignment="CENTER" prefHeight="61.0" prefWidth="337.0">
+            <children>
+               <Label prefHeight="44.0" prefWidth="67.0" text="Ringtone:">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font>
+               </Label>
+               <Region prefHeight="100.0" prefWidth="6.0" />
+               <ChoiceBox fx:id="ringtoneChoiceBox" prefHeight="25.0" prefWidth="202.0" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" prefHeight="57.0" prefWidth="337.0">
+            <children>
+               <TextField fx:id="titleField" alignment="CENTER" prefHeight="25.0" prefWidth="261.0" promptText="Title" />
+            </children>
+         </HBox>
+         <HBox alignment="BOTTOM_CENTER" prefHeight="38.0" prefWidth="337.0" spacing="50.0">
             <children>
                 <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
                 <Button fx:id="setButton" mnemonicParsing="false" onAction="#setClicked" text="Set" underline="true" />

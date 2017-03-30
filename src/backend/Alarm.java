@@ -60,6 +60,10 @@ public class Alarm {
 
     @Expose
     private String alarmLabel = AlarmConstants.DEFAULT_LABEL;
+    
+
+    @Expose
+    private String ringtone = AlarmConstants.DEFAULT_RINGTONE;
 
     /**
      * standard constructor, creates a unique id for the new alarm.
@@ -153,8 +157,11 @@ public class Alarm {
      * @param repeatSettings
      * @param hour
      * @param minute
+     * @param repeatSettings2 
+     * @param label 
+     * @param tone 
      */
-    public void changeSettings(short repeatSettings, int hour, int minute){
+    public void changeSettings(short repeatSettings, int hour, int minute, String tone, String label){
         // Though unnecessary, make things easy on ourselves by treating all updates like a big
         // settings change, at least for now.
         this.repeatSettings = repeatSettings;
@@ -163,6 +170,12 @@ public class Alarm {
         if ((repeatSettings & AlarmConstants.ALLDAYS) == 0) { repeatSettings = 0; }
 
         setTime(hour, minute);
+        
+        setRingtone(tone);
+        
+        setAlarmLabel(label);
+        
+        
 
         // If the alarm is already disabled, we don't have to do anything. Otherwise...
         if (isEnabled()) {
@@ -210,11 +223,23 @@ public class Alarm {
         return enabled;
     }
     
+    public String getRingtone(){
+    	return ringtone;
+    }
+    
+    public void setRingtone(String ringtone){
+    	this.ringtone = ringtone;
+    }
+    
     public void setAlarmLabel(String label){alarmLabel = label;}
     public String getAlarmLabel(){return alarmLabel;}
 
     public boolean isRepeatEnabled() { return ((repeatSettings & AlarmConstants.REPEAT_ENABLED) == 0) ? false : true; }
 
+    public boolean isEnabledForDay(int day){
+    	return ((AlarmConstants.WEEK_ARRAY[day] & repeatSettings) != 0);
+    }
+    
     public short getRepeatSettings() {return repeatSettings;}
 
     //public setRingtone() //TODO: implement ability to change ringtone (in future sprint)

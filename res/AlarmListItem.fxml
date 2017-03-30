@@ -22,14 +22,14 @@
             <Font size="11.0" />
          </font>
       </Button>
-      <Label fx:id="alarmDaysLabel" alignment="CENTER" layoutX="7.0" layoutY="49.0" prefHeight="27.0" prefWidth="76.0">
+      <Label fx:id="alarmDaysLabel" layoutX="7.0" layoutY="49.0" prefHeight="27.0" prefWidth="298.0" text="test">
          <font>
-            <Font size="16.0" />
+            <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="alarmLabel" alignment="CENTER" layoutX="6.0" prefHeight="27.0" prefWidth="76.0">
+      <Label fx:id="alarmLabel" layoutX="6.0" prefHeight="27.0" prefWidth="320.0" text="test">
          <font>
-            <Font size="16.0" />
+            <Font size="14.0" />
          </font>
       </Label>
       <RadioButton fx:id="enabledButton" layoutX="158.0" layoutY="31.0" mnemonicParsing="false" text="Enabled" />

@@ -38,27 +38,38 @@ public class AlarmNotificationController implements Initializable{
 		this.activeAlarmID = id;
 	}
 	
-	/**
-	 * Standard constructor. currently it just gets the
-	 * default alarm file, but if at a later time we wanted
-	 * to have different alarms, we might have a setter, or
-	 * pass in the file we wanted to use in here.
-	 * As for now, it just activates a ringtone.
-	 */
-	public AlarmNotificationController() {
+	public void startUp(){
 		alarmManager = AlarmManager.getInstance();
 		
-		File ringtone = new File("media/alarm_1.mp3");
+		String label = alarmManager.getAlarm(activeAlarmID).getAlarmLabel();
+		if (label.equals(AlarmConstants.DEFAULT_LABEL)){
+			label = "Alarm going off!";
+		}
+		alarmLabel.setText(label);
+		
+		String ringtoneName = alarmManager.getAlarm(activeAlarmID).getRingtone();
+		ringtoneName = AlarmConstants.RINGTONE_DIR + "/" + ringtoneName;
+		File ringtone = new File(ringtoneName);
+		
+		//This would be a great place to catch a file not found exception and then
+		// set the ringtone file to a default value of some sort.
         Media sound = new Media(ringtone.toURI().toString());
         player = new MediaPlayer(sound);
         player.setVolume(1.0);
         player.setCycleCount(MediaPlayer.INDEFINITE);
         player.play();
 	}
+	
+	/**
+	 * Standard constructor. Does not do much.
+	 * Most of the heavy lifting of starting an alarm
+	 * is done in startUp();
+	 */
+	public AlarmNotificationController() {
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Nothin, doggo.
 	}
 	
 	/**

@@ -38,6 +38,7 @@ public abstract class AlarmConstants {
     public static final long MINUTE_MILLIS = 60000;
 
     public static final String DEFAULT_LABEL = "";
+    public static final String DEFAULT_RINGTONE = "Default.mp3";
     public static final int DEFAULT_SNOOZE_LENGTH = 2;
 
     //Ok i'm really sorry but ever since i realized you could store all the information
@@ -59,4 +60,5 @@ public abstract class AlarmConstants {
 
     // used to keep track of the ongoing alarm IDs
     public static final String PERSISTENT_ALARM_ID = "persistent_ID";
+	public static final String RINGTONE_DIR = "media";
 }

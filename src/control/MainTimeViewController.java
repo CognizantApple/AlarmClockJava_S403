@@ -126,7 +126,7 @@ public class MainTimeViewController implements Initializable{
 		Calendar c = Calendar.getInstance();
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
-		int currentDay = c.getMaximum(Calendar.DAY_OF_WEEK);
+		int currentDay = c.get(Calendar.DAY_OF_WEEK);
 		
 		// Only bother checking if alarms should go off if the current minute has changed.
 		if(this.currentMinute != currentMinute){
@@ -143,7 +143,9 @@ public class MainTimeViewController implements Initializable{
 						if(currentHour == a.getHour() && currentMinute == a.getMinute()){
 							// If the alarm is repeating, we need to make sure the alarm is enabled for the current day.
 							if(a.isRepeatEnabled()){
-								// hahaha see ya next sprint holmes
+								if(a.isEnabledForDay(currentDay-1)){
+									activateAlarmEnsemble(a);
+								}
 							}
 							else{
 								activateAlarmEnsemble(a);
@@ -181,6 +183,7 @@ public class MainTimeViewController implements Initializable{
 			            });
 			            
 			            alarmNotificationController.setActiveAlarmID(a.getId());
+			            alarmNotificationController.startUp();
 			            stage.show();
 		            } catch (IOException e) {
 		            	e.printStackTrace();

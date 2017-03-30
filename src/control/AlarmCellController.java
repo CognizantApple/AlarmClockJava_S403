@@ -49,6 +49,12 @@ public class AlarmCellController {
     private Label alarmTimeLabel;
     
     @FXML
+    private Label alarmDaysLabel;
+    
+    @FXML
+    private Label alarmLabel;
+    
+    @FXML
     private RadioButton enabledButton;
     
     
@@ -131,6 +137,9 @@ public class AlarmCellController {
     	c.set(Calendar.MINUTE, alarm.getMinute());
     	// Set up the time display
         alarmTimeLabel.setText(HMFormat.format(c.getTime()));
+        
+        alarmDaysLabel.setText(alarm.repeatDaysToString());
+        alarmLabel.setText(alarm.getAlarmLabel());
         
         // Set up whether the alarm appears enabled or not.
         enabledButton.setSelected(alarm.isEnabled());
