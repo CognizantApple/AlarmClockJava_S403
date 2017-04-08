@@ -1,5 +1,9 @@
 package control;
 
+import backend.Alarm;
+import backend.AlarmConstants;
+import backend.AlarmManager;
+import backend.TimeUpdater;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -8,11 +12,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Timer;
-
-import backend.Alarm;
-import backend.AlarmConstants;
-import backend.AlarmManager;
-import backend.TimeUpdater;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +20,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -31,20 +32,18 @@ import javafx.stage.Stage;
  * @author 
  *
  */
-public class MainTimeViewController implements Initializable{
+public class MainTimeViewController implements Initializable {
 
 
-    private SimpleDateFormat HMFormat;
-    private SimpleDateFormat SSFormat;
+    private SimpleDateFormat hmFormat;
+    private SimpleDateFormat ssFormat;
     private SimpleDateFormat dateFormat;
     
-    // This is a completely silly solution to prevent alarms going off
+    // This is a solution to prevent alarms going off
     // more than once in the current minute. essentially, alarms are only
     // checked to go off whenever the currentMinute changes.
     private int currentMinute;
-    
-    //private AlarmNotificationController alarmNotificationController;
-    
+
 	@FXML
 	private Label timeLabel;    
 	@FXML
@@ -58,18 +57,20 @@ public class MainTimeViewController implements Initializable{
 	
 	@FXML
 	private ListView<HashMap<Integer, Object>> alarmsListView;
-	public static ObservableList<HashMap<Integer, Object>> observableAlarmList = FXCollections.observableArrayList();
+	public static ObservableList<HashMap<Integer, Object>>
+		observableAlarmList = FXCollections.observableArrayList();
 	
 	private AlarmManager alarmManager;
     private Timer fatherTime;
 
 	
 	/**
-	 * Default constructor
+	 * Default constructor. Sets up the date formats, loads the alarm manager,
+	 * and restores saved alarms.
 	 */
 	public MainTimeViewController() {
-		HMFormat = new SimpleDateFormat(AlarmConstants.HOUR_MIN_12);
-		SSFormat = new SimpleDateFormat(AlarmConstants.SEC_12);
+		hmFormat = new SimpleDateFormat(AlarmConstants.HOUR_MIN_12);
+		ssFormat = new SimpleDateFormat(AlarmConstants.SEC_12);
 		dateFormat = new SimpleDateFormat(AlarmConstants.DATE_WEEK_D_M_Y);
         alarmManager = AlarmManager.getInstance();
         alarmManager.recoverAlarmsList();
@@ -94,7 +95,6 @@ public class MainTimeViewController implements Initializable{
 	/**
 	 * Called by the thread running all the dang time.
 	 * This updates the UI and checks if any alarms need activating.
-	 * @param time
 	 */
 	public void updateTimeAndCheckAlarms() {
 		Calendar c = Calendar.getInstance();
@@ -104,12 +104,12 @@ public class MainTimeViewController implements Initializable{
 		    @Override
 		    public void run() {
 				// Update UI here.
-				timeLabel.setText(HMFormat.format(c.getTime()));
-				secondsLabel.setText(SSFormat.format(c.getTime()));
+				timeLabel.setText(hmFormat.format(c.getTime()));
+				secondsLabel.setText(ssFormat.format(c.getTime()));
 				dateLabel.setText(dateFormat.format(c.getTime()));
 		    }
 		});
-		if(alarmManager.isRefreshNeeded()){
+		if (alarmManager.isRefreshNeeded()) {
 			redrawAlarmListView();
 		}
 		
@@ -122,32 +122,31 @@ public class MainTimeViewController implements Initializable{
 	 * Compares the current time to the set times of all enabled
 	 * alarms, and enables them as necessary.
 	 */
-	private void checkAlarms(){
+	private void checkAlarms() {
 		Calendar c = Calendar.getInstance();
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
 		int currentDay = c.get(Calendar.DAY_OF_WEEK);
 		
 		// Only bother checking if alarms should go off if the current minute has changed.
-		if(this.currentMinute != currentMinute){
+		if (this.currentMinute != currentMinute) {
 			this.currentMinute = currentMinute;
-			for (Alarm a : alarmManager.getAllAlarms()){
-				if(a.isEnabled()){
-					if(a.isSnoozing()){
+			for (Alarm a : alarmManager.getAllAlarms()) {
+				if (a.isEnabled()) {
+					if (a.isSnoozing()) {
 						// don't need to check the day
-						if(currentHour == a.getTempSnoozeHour() && currentMinute == a.getTempSnoozeMinute()){
+						if (currentHour == a.getTempSnoozeHour() && currentMinute == a.getTempSnoozeMinute()) {
 							activateAlarmEnsemble(a);
 						}
-					}
-					else{
-						if(currentHour == a.getHour() && currentMinute == a.getMinute()){
+					} else {
+						if (currentHour == a.getHour() && currentMinute == a.getMinute()) {
 							// If the alarm is repeating, we need to make sure the alarm is enabled for the current day.
-							if(a.isRepeatEnabled()){
-								if(a.isEnabledForDay(currentDay-1)){
+							if (a.isRepeatEnabled()) {
+								if (a.isEnabledForDay(currentDay - 1)) {
 									activateAlarmEnsemble(a);
 								}
-							}
-							else{
+							} else {
+							
 								activateAlarmEnsemble(a);
 							}
 						}
@@ -163,13 +162,13 @@ public class MainTimeViewController implements Initializable{
 	 * activates an alarm, calls the AlarmNotificationController
 	 * to do it's magic and stuff. each new alarm that goes off will have 
 	 * it's own window.
-	 * @param a
+	 * @param a The alarm being activated (starting ringtone, making a notification)
 	 */
-	private void activateAlarmEnsemble(Alarm a){
+	private void activateAlarmEnsemble(Alarm a) {
 			Platform.runLater(new Runnable() {
 			    @Override
 			    public void run() {
-			    	try{
+			    	try {
 				    	a.activate();
 				    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../AlarmNotification.fxml"));
 			            Parent root = fxmlLoader.load();
@@ -182,7 +181,7 @@ public class MainTimeViewController implements Initializable{
 			            	alarmNotificationController.getPlayer().stop();
 			            });
 			            
-			            alarmNotificationController.setActiveAlarmID(a.getId());
+			            alarmNotificationController.setActiveAlarmId(a.getId());
 			            alarmNotificationController.startUp();
 			            stage.show();
 		            } catch (IOException e) {

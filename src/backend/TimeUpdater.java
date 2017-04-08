@@ -1,7 +1,7 @@
 package backend;
 
-import java.util.TimerTask;
 import control.MainTimeViewController;
+import java.util.TimerTask;
 
 /**
  * Thread that runs all the dang time and
@@ -11,13 +11,13 @@ import control.MainTimeViewController;
  * @author andys
  *
  */
-public class TimeUpdater extends TimerTask{
+public class TimeUpdater extends TimerTask {
 
 
 	    private MainTimeViewController mom;
 
-	    // TODO: Now that this thread runs from a fragment, need rootView of that fragment to access Views. Do we still need cont and act params?
-	    public TimeUpdater(MainTimeViewController mom){
+	    
+	    public TimeUpdater(MainTimeViewController mom) {
 	        this.mom = mom;
 	    }
 

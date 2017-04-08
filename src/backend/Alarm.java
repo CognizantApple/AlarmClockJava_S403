@@ -1,30 +1,31 @@
 package backend;
 
+import com.google.gson.annotations.Expose;
 import java.util.Calendar;
 
-import com.google.gson.annotations.Expose;
 
 public class Alarm {
+	
 	/**
-     * the days of the week an alarm should repeat. Default value is all days, but disabled.
-     */
-    @Expose
+	 * the days of the week an alarm should repeat. Default value is all days, but disabled.
+	 */
+	@Expose
     private short repeatSettings = AlarmConstants.ALLDAYS;
 
-    /**
-     * The ID of this alarm
-     */
-    @Expose
+	/**
+	 * The ID of this alarm. generated randomly.
+	 */
+	@Expose
     private String id;
     
     /**
-     * The hour for which this alarm is set
+     * The hour for which this alarm is set.
      */
     @Expose
     private int hour; // 24-HOUR TIME, DON'T GET TRICKED LOL
 
     /**
-     * The minute for which this alarm is set
+     * The minute for which this alarm is set.
      */
     @Expose
     private int minute;
@@ -41,19 +42,19 @@ public class Alarm {
     private int tempSnoozeHour;
 
     /**
-     * indicates whether the alarm is currently ringing
+     * indicates whether the alarm is currently ringing.
      */
     @Expose
     private boolean active;
 
     /**
-     * indicates whether the alarm is snoozing
+     * indicates whether the alarm is snoozing.
      */
     @Expose
     private boolean snoozing;
 
     /**
-     * indicates whether the alarm is enabled (set to go off)
+     * indicates whether the alarm is enabled (set to go off).
      */
     @Expose
     private boolean enabled;
@@ -67,8 +68,8 @@ public class Alarm {
 
     /**
      * standard constructor, creates a unique id for the new alarm.
-     * @param hour
-     * @param minute
+     * @param hour The (24-hour) hour of the alarm time.
+     * @param minute The (0-59) minute of the alarm time.
      */
     public Alarm(int hour, int minute) {
         this.hour = hour;
@@ -85,23 +86,24 @@ public class Alarm {
     /**
      * Activates the Alarm.
      */
-    public void activate(){
+    public void activate() {
         active = true;
         snoozing = false;
     }
+    
     /**
-     * Stops the ringing alarm
+     * Stops the ringing alarm.
      */
-    public void dismiss(){
+    public void dismiss() {
         //Set the Alarm switch to "disabled" unless the Alarm is snoozing
-        if(!snoozing) {
+        if (!snoozing) {
 
             // If this alarm repeats, just call the function to enable, which
             // handles the settings for repeating alarms.
-            if (isRepeatEnabled()){
+            if (isRepeatEnabled()) {
                 enable();
-            }
-            else {
+            } else {
+            
                 disable();
             }
         }
@@ -113,9 +115,9 @@ public class Alarm {
     /**
      * Snoozes the alarm.
      * Sets snoozing to true and updates the desired length of snoooooze.
-     * @param snoozeLength
+     * @param snoozeLength an integer number of minutes to snooze the alarm for.
      */
-    public void snooze(int snoozeLength){
+    public void snooze(int snoozeLength) {
 
     	//Compute the temporary time to set an alarm for, based on the current time.
     	Calendar c = Calendar.getInstance();
@@ -138,14 +140,14 @@ public class Alarm {
      * now it's basically just a boolean
      * for the alarmManager to check.
      */
-    public void enable(){
+    public void enable() {
         enabled = true;
     }
     
     /**
-     * Prevents the alarm from going off (cancels it)
+     * Prevents the alarm from going off (cancels it).
      */
-    public void disable(){
+    public void disable() {
 
     	snoozing = false;
         enabled = false;
@@ -154,14 +156,13 @@ public class Alarm {
     /**
      * Current working version of a function that changes alarm settings.
      * later on it'll also probably pass a label. next sprint problems.
-     * @param repeatSettings
-     * @param hour
-     * @param minute
-     * @param repeatSettings2 
-     * @param label 
-     * @param tone 
+     * @param repeatSettings The days of a week an alarm should repeat.
+     * @param hour The new hour time of the alarm.
+     * @param minute The new minute time of the alarm.
+     * @param label The label for this alarm.
+     * @param tone The name of the ringtone for this alarm.
      */
-    public void changeSettings(short repeatSettings, int hour, int minute, String tone, String label){
+    public void changeSettings(short repeatSettings, int hour, int minute, String tone, String label) {
         // Though unnecessary, make things easy on ourselves by treating all updates like a big
         // settings change, at least for now.
         this.repeatSettings = repeatSettings;
@@ -189,7 +190,7 @@ public class Alarm {
 
     }
 
-    public void setTime(int hour, int minute){
+    public void setTime(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
     }
@@ -226,41 +227,50 @@ public class Alarm {
         return enabled;
     }
     
-    public String getRingtone(){
+    public String getRingtone() {
     	return ringtone;
     }
     
-    public void setRingtone(String ringtone){
+    public void setRingtone(String ringtone) {
     	this.ringtone = ringtone;
     }
     
-    public void setAlarmLabel(String label){alarmLabel = label;}
-    public String getAlarmLabel(){return alarmLabel;}
+    public void setAlarmLabel(String label) { 
+    	alarmLabel = label;
+    }
+    
+    public String getAlarmLabel() {
+    	return alarmLabel;
+    }
 
-    public boolean isRepeatEnabled() { return ((repeatSettings & AlarmConstants.REPEAT_ENABLED) == 0) ? false : true; }
+    public boolean isRepeatEnabled() {
+    	return ((repeatSettings & AlarmConstants.REPEAT_ENABLED) == 0) ? false : true; 
+    }
 
-    public boolean isEnabledForDay(int day){
+    public boolean isEnabledForDay(int day) {
     	return ((AlarmConstants.WEEK_ARRAY[day] & repeatSettings) != 0);
     }
     
-    public short getRepeatSettings() {return repeatSettings;}
+    public short getRepeatSettings() {
+    	return repeatSettings;
+    }
 
     //public setRingtone() //TODO: implement ability to change ringtone (in future sprint)
 
     /**
      * For the purpose of display, shows a textual view
      * of the days an alarm is set to repeat.
-     * @return
+     * @return A string containing a comma-delimited list of the days an alarm is set for.
      */
     public String repeatDaysToString() {
         String result = " ";
-        if (!isRepeatEnabled()){
+        if (!isRepeatEnabled()) {
             return result;
         }
         boolean first = true;
-        for (int i = 0; i < 7; i++){
-            if ((repeatSettings & AlarmConstants.WEEK_ARRAY[i]) != 0){ // enabled for that day
-                if (!first){
+        for (int i = 0; i < 7; i++) {
+            if ((repeatSettings & AlarmConstants.WEEK_ARRAY[i]) != 0) { // enabled for that day
+                if (!first) {
                     result += ", ";
                 }
                 first = false;

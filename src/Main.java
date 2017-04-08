@@ -7,12 +7,17 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * this is where the magic begins homie
+ * Main class for the application. Starts the application by loading
+ * the main UI and showing it.
  * @author andys
  *
  */
 public class Main extends Application {
 	
+	/**
+	 * Essentially just calls launch, which calls start.
+	 * @param args unused.
+	 */
 	public static void main(String[] args) {
 		Platform.setImplicitExit(false);
 		//starts the program there bud
