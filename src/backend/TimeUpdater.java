@@ -1,7 +1,6 @@
 package backend;
 
 import control.MainTimeViewController;
-import java.util.TimerTask;
 
 /**
  * Thread that runs all the dang time and
@@ -11,7 +10,7 @@ import java.util.TimerTask;
  * @author andys
  *
  */
-public class TimeUpdater extends TimerTask {
+public class TimeUpdater extends Thread {
 
 
 	    private MainTimeViewController mom;

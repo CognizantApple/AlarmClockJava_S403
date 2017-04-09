@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,7 +64,7 @@ public class MainTimeViewController implements Initializable {
 		observableAlarmList = FXCollections.observableArrayList();
 	
 	private AlarmManager alarmManager;
-    private Timer fatherTime;
+	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
 	
 	/**
@@ -78,10 +81,14 @@ public class MainTimeViewController implements Initializable {
     }
 	
 
-
-    public void initPanel(Pane panel) {
-        this.fatherTime = new Timer();
-		fatherTime.schedule(new TimeUpdater(this), 0, 200);
+	/**
+	 * Initialization of the MainTimeViewController. Most important step, creating a thread
+	 * that will attempt to update the time every 200 ms.
+	 * @param panel unused. this UI.
+	 */
+	public void initPanel(Pane panel) {
+        TimeUpdater fatherTime = new TimeUpdater(this);
+        executor.scheduleAtFixedRate(fatherTime, 0, 200, TimeUnit.MILLISECONDS);
     }
 	
 	@Override
@@ -97,6 +104,7 @@ public class MainTimeViewController implements Initializable {
 	 * This updates the UI and checks if any alarms need activating.
 	 */
 	public void updateTimeAndCheckAlarms() {
+		System.out.println("tick.");
 		Calendar c = Calendar.getInstance();
 		
 		//Just some goofy ass javaFX bs
