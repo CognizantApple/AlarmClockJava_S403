@@ -104,7 +104,7 @@ public class MainTimeViewController implements Initializable {
 	 * This updates the UI and checks if any alarms need activating.
 	 */
 	public void updateTimeAndCheckAlarms() {
-		System.out.println("tick.");
+		
 		Calendar c = Calendar.getInstance();
 		
 		//Just some goofy ass javaFX bs
